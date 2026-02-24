@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { metaMask } from 'wagmi/connectors';
+import { metaMaskConnector } from '@/lib/wagmi-config';
 import { Button } from '@/components/ui/button';
 import { Wallet, LogOut } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function MetaMaskConnectButton() {
   const { address, isConnected } = useAccount();
-  const { connect, connectors, isPending } = useConnect();
+  const { connect, isPending } = useConnect();
   const { disconnect } = useDisconnect();
   const [isOpen, setIsOpen] = useState(false);
   const [isMetaMaskInstalled, setIsMetaMaskInstalled] = useState(false);
@@ -42,19 +42,12 @@ export function MetaMaskConnectButton() {
         return;
       }
 
-      // Find the MetaMask connector
-      const metaMaskConnector = connectors.find((c) => c.id === 'metaMask');
-      
-      if (!metaMaskConnector) {
-        toast.error('MetaMask connector not found');
-        return;
-      }
-
-      // Request account access
+      // Request account access first
       await ethereum.request({ method: 'eth_requestAccounts' });
       
-      // Connect using wagmi
+      // Connect using wagmi with the MetaMask connector
       connect({ connector: metaMaskConnector });
+      toast.success('Connecting to MetaMask...');
     } catch (error: any) {
       console.error('Connection error:', error);
       

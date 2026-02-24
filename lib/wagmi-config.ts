@@ -31,9 +31,19 @@ const celoAlfajores = defineChain({
   testnet: true,
 });
 
+// MetaMask connector with SDK support
+export const metaMaskConnector = metaMask({
+  dappMetadata: {
+    name: 'CeloFlow',
+    url: typeof window !== 'undefined' ? window.location.origin : 'https://celoflow.com',
+  },
+  enableAnalytics: false,
+  infuraAPIKey: process.env.NEXT_PUBLIC_INFURA_API_KEY,
+});
+
 export const wagmiConfig = createConfig({
   chains: [celoAlfajores],
-  connectors: [metaMask()],
+  connectors: [metaMaskConnector],
   transports: {
     [celoAlfajores.id]: http(CELO_ALFAJORES_RPC_URL),
   },
