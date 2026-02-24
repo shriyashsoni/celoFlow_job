@@ -3,15 +3,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { formatEther } from 'viem';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { MetaMaskConnectButton } from '@/components/metamask-connect-button';
 import { WalletDetector } from '@/components/wallet-detector';
 import { StreamSearch } from '@/components/stream-search';
-import { ExportStreamsData } from '@/components/export-streams';import { ContractConfigStatus } from '@/components/contract-config-status';import {
+import { ExportStreamsData } from '@/components/export-streams';
+import {
   Table,
   TableBody,
   TableCell,
@@ -163,13 +164,12 @@ export default function EmployeeDashboardPage() {
                 ← Home
               </Button>
             </Link>
-            <MetaMaskConnectButton />
+            <ConnectButton />
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8 animate-fade-in">
-        <ContractConfigStatus />
         <WalletDetector />
 
         {isWrongNetwork && (
@@ -177,7 +177,7 @@ export default function EmployeeDashboardPage() {
             <CardContent className="pt-6 flex items-center gap-3">
               <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
               <div className="text-sm text-red-300">
-                Wrong network. Please switch to Celo Alfajores (Chain ID 44787).
+                Wrong network. Please switch to Celo Sepolia (Chain ID 11142220).
               </div>
             </CardContent>
           </Card>

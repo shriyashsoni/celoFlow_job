@@ -3,17 +3,16 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { isAddress, formatEther } from 'viem';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { MetaMaskConnectButton } from '@/components/metamask-connect-button';
 import { WalletDetector } from '@/components/wallet-detector';
 import { StreamSearch } from '@/components/stream-search';
 import { ExportStreamsData } from '@/components/export-streams';
-import { ContractConfigStatus } from '@/components/contract-config-status';
 import {
   Table,
   TableBody,
@@ -23,8 +22,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useCeloFlowActions, useCeloFlowData, useCeloWallet } from '@/lib/useCeloFlow';
-import { isBurnAddress } from '@/lib/address-utils';
-import { Info, AlertCircle, CheckCircle2, Clock, TrendingUp, DollarSign, Users, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Info, AlertCircle, CheckCircle2, Clock, TrendingUp, DollarSign, Users, RefreshCw } from 'lucide-react';
 import '@/styles/animations.css';
 
 const toDateTime = (seconds: bigint) => {
@@ -47,9 +45,6 @@ export default function EmployerDashboardPage() {
 
   const interactionDisabled = !isConnected || isWrongNetwork;
 
-  // Check if address is a burn address
-  const isAddressBurn = useMemo(() => isBurnAddress(employeeAddress), [employeeAddress]);
-
   const totalActive = useMemo(() => employerStreams.filter((stream) => stream.isActive).length, [employerStreams]);
   const totalStreaming = useMemo(
     () => formatEther(employerStreams.reduce((sum, s) => sum + s.totalAmount, BigInt(0))),
@@ -70,12 +65,6 @@ export default function EmployerDashboardPage() {
 
     if (!isAddress(employeeAddress)) {
       toast.error('Invalid employee wallet address');
-      return;
-    }
-
-    // Check for burn addresses using utility function
-    if (isBurnAddress(employeeAddress)) {
-      toast.error('⚠️ You\'re sending to a burn address! This will permanently destroy your assets. Please enter a valid employee wallet address.');
       return;
     }
 
@@ -208,13 +197,12 @@ export default function EmployerDashboardPage() {
                 ← Home
               </Button>
             </Link>
-            <MetaMaskConnectButton />
+            <ConnectButton />
           </div>
         </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8 animate-fade-in">
-        <ContractConfigStatus />
         <WalletDetector />
 
         {isWrongNetwork && (
@@ -222,7 +210,7 @@ export default function EmployerDashboardPage() {
             <CardContent className="pt-6 flex items-center gap-3">
               <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
               <div className="text-sm text-red-300">
-                Wrong network. Please switch to Celo Alfajores (Chain ID 44787).
+                Wrong network. Please switch to Celo Sepolia (Chain ID 11142220).
               </div>
             </CardContent>
           </Card>
@@ -349,34 +337,14 @@ export default function EmployerDashboardPage() {
           <CardContent className="space-y-4 pt-6">
             <div>
               <label className="text-sm font-medium text-[#cccccc] block mb-2">Employee Wallet Address</label>
-              <div className="relative">
-                <Input
-                  value={employeeAddress}
-                  onChange={(event) => setEmployeeAddress(event.target.value)}
-                  placeholder="0x1234567890abcdef..."
-                  className={`bg-[#1a1a1a] transition-all duration-300 ${
-                    isAddressBurn
-                      ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
-                      : 'border-[#1a1a1a] focus:border-[#FFD600] focus:ring-[#FFD600]/20'
-                  }`}
-                  disabled={interactionDisabled || isCreating}
-                />
-                {isAddressBurn && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                    <AlertTriangle className="w-5 h-5 text-red-500 animate-pulse" />
-                  </div>
-                )}
-              </div>
-              {isAddressBurn ? (
-                <div className="flex items-center gap-2 mt-2 p-2 bg-red-500/10 border border-red-500/30 rounded animate-pulse">
-                  <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
-                  <p className="text-xs text-red-300 font-medium">
-                    ⚠️ BURN ADDRESS DETECTED! Sending funds here will permanently destroy them. Enter a valid employee wallet.
-                  </p>
-                </div>
-              ) : (
-                <p className="text-xs text-[#999999] mt-1">The wallet that will receive the stream</p>
-              )}
+              <Input
+                value={employeeAddress}
+                onChange={(event) => setEmployeeAddress(event.target.value)}
+                placeholder="0x1234567890abcdef..."
+                className="bg-[#1a1a1a] border-[#1a1a1a] transition-all duration-300 focus:border-[#FFD600] focus:ring-[#FFD600]/20"
+                disabled={interactionDisabled || isCreating}
+              />
+              <p className="text-xs text-[#999999] mt-1">The wallet that will receive the stream</p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-4">
@@ -412,18 +380,13 @@ export default function EmployerDashboardPage() {
 
             <Button
               onClick={handleCreate}
-              className="w-full bg-gradient-to-r from-[#FFD600] to-[#FFC700] hover:from-[#FFD600]/90 hover:to-[#FFC700]/90 text-black font-bold h-11 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={interactionDisabled || isCreating || isAddressBurn}
+              className="w-full bg-gradient-to-r from-[#FFD600] to-[#FFC700] hover:from-[#FFD600]/90 hover:to-[#FFC700]/90 text-black font-bold h-11 transition-all duration-300 transform hover:scale-105"
+              disabled={interactionDisabled || isCreating}
             >
               {isCreating ? (
                 <>
                   <Spinner className="w-4 h-4 mr-2" />
                   Creating...
-                </>
-              ) : isAddressBurn ? (
-                <>
-                  <AlertTriangle className="w-4 h-4 mr-2" />
-                  Cannot Send to Burn Address
                 </>
               ) : (
                 '🚀 Start Streaming'

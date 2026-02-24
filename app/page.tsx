@@ -2,11 +2,10 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { MetaMaskConnectButton } from '@/components/metamask-connect-button';
-import { MetaMaskDebug } from '@/components/metamask-debug';
 import { ChevronRight, Zap } from 'lucide-react';
 import { Footer } from '@/components/footer';
 
@@ -30,7 +29,7 @@ export default function Home() {
             </div>
             <span className="text-2xl font-bold tracking-tight">CeloFlow</span>
           </div>
-          <MetaMaskConnectButton />
+          <ConnectButton />
         </div>
       </header>
 
@@ -46,40 +45,44 @@ export default function Home() {
             Real-time salary streaming on Celo blockchain. No waiting for payday. Earn and withdraw whenever you want.
           </p>
 
-          <MetaMaskDebug />
+          <ConnectButton.Custom>
+            {({ openConnectModal, mounted, account, chain }) => {
+              const ready = mounted;
+              const connected = ready && account && chain;
 
-          {isConnected ? (
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                onClick={() => router.push('/dashboard')}
-                size="lg"
-                className="bg-[#FFD600] hover:bg-[#FFD600]/90 text-black font-bold text-lg"
-              >
-                Go to Dashboard
-                <ChevronRight className="w-5 h-5 ml-2" />
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-[#1a1a1a] hover:bg-[#0a0a0a] text-white font-bold text-lg"
-                disabled
-              >
-                Learn More
-              </Button>
-            </div>
-          ) : (
-            <div className="flex flex-col sm:flex-row gap-4">
-              <MetaMaskConnectButton />
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-[#1a1a1a] hover:bg-[#0a0a0a] text-white font-bold text-lg"
-                disabled
-              >
-                Learn More
-              </Button>
-            </div>
-          )}
+              return (
+                <div className="flex flex-col sm:flex-row gap-4">
+                  {connected ? (
+                    <Button
+                      onClick={() => router.push('/dashboard')}
+                      size="lg"
+                      className="bg-[#FFD600] hover:bg-[#FFD600]/90 text-black font-bold text-lg"
+                    >
+                      Go to Dashboard
+                      <ChevronRight className="w-5 h-5 ml-2" />
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={openConnectModal}
+                      size="lg"
+                      className="bg-[#FFD600] hover:bg-[#FFD600]/90 text-black font-bold text-lg"
+                    >
+                      Connect Wallet
+                      <ChevronRight className="w-5 h-5 ml-2" />
+                    </Button>
+                  )}
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-[#1a1a1a] hover:bg-[#0a0a0a] text-white font-bold text-lg"
+                    disabled
+                  >
+                    Learn More
+                  </Button>
+                </div>
+              );
+            }}
+          </ConnectButton.Custom>
         </div>
       </section>
 
@@ -135,19 +138,32 @@ export default function Home() {
         <div className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-2xl p-12 text-center">
           <h2 className="text-4xl font-bold mb-4">Ready to stream your salary?</h2>
           <p className="text-[#cccccc] mb-8 max-w-2xl mx-auto">
-            Connect your MetaMask wallet and start streaming or receiving salary in real-time on Celo.
+            Connect your wallet and start streaming or receiving salary in real-time on Celo.
           </p>
-          {isConnected ? (
-            <Button
-              onClick={() => router.push('/dashboard')}
-              size="lg"
-              className="bg-[#FFD600] hover:bg-[#FFD600]/90 text-black font-bold"
-            >
-              Go to Dashboard
-            </Button>
-          ) : (
-            <MetaMaskConnectButton />
-          )}
+          <ConnectButton.Custom>
+            {({ openConnectModal, mounted, account, chain }) => {
+              const ready = mounted;
+              const connected = ready && account && chain;
+
+              return connected ? (
+                <Button
+                  onClick={() => router.push('/dashboard')}
+                  size="lg"
+                  className="bg-[#FFD600] hover:bg-[#FFD600]/90 text-black font-bold"
+                >
+                  Go to Dashboard
+                </Button>
+              ) : (
+                <Button
+                  onClick={openConnectModal}
+                  size="lg"
+                  className="bg-[#FFD600] hover:bg-[#FFD600]/90 text-black font-bold"
+                >
+                  Connect Wallet to Get Started
+                </Button>
+              );
+            }}
+          </ConnectButton.Custom>
         </div>
       </section>
 
