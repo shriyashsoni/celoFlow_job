@@ -3,13 +3,13 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { isAddress, formatEther } from 'viem';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Spinner } from '@/components/ui/spinner';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { MetaMaskConnectButton } from '@/components/metamask-connect-button';
 import { WalletDetector } from '@/components/wallet-detector';
 import { StreamSearch } from '@/components/stream-search';
 import { ExportStreamsData } from '@/components/export-streams';
@@ -197,7 +197,7 @@ export default function EmployerDashboardPage() {
                 ← Home
               </Button>
             </Link>
-            <ConnectButton />
+            <MetaMaskConnectButton />
           </div>
         </div>
       </header>
