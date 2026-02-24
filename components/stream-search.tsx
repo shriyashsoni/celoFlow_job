@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Search, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
@@ -37,6 +37,10 @@ export function StreamSearch({ streams, onFilter, placeholder = 'Search streams.
 
     return result;
   }, [streams, searchTerm, filterType]);
+
+  useEffect(() => {
+    onFilter(filtered);
+  }, [filtered, onFilter]);
 
   return (
     <div className="space-y-3 mb-6 animate-in fade-in">
