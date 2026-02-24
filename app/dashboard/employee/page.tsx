@@ -11,8 +11,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { MetaMaskConnectButton } from '@/components/metamask-connect-button';
 import { WalletDetector } from '@/components/wallet-detector';
 import { StreamSearch } from '@/components/stream-search';
-import { ExportStreamsData } from '@/components/export-streams';
-import {
+import { ExportStreamsData } from '@/components/export-streams';import { ContractConfigStatus } from '@/components/contract-config-status';import {
   Table,
   TableBody,
   TableCell,
@@ -170,6 +169,7 @@ export default function EmployeeDashboardPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-8 animate-fade-in">
+        <ContractConfigStatus />
         <WalletDetector />
 
         {isWrongNetwork && (
