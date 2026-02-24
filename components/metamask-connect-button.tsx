@@ -1,33 +1,70 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
-import { metaMaskConnector } from '@/lib/wagmi-config';
+import { metaMask } from 'wagmi/connectors';
 import { Button } from '@/components/ui/button';
 import { Wallet, LogOut } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function MetaMaskConnectButton() {
   const { address, isConnected } = useAccount();
-  const { connect, isPending } = useConnect();
+  const { connect, connectors, isPending } = useConnect();
   const { disconnect } = useDisconnect();
   const [isOpen, setIsOpen] = useState(false);
+  const [isMetaMaskInstalled, setIsMetaMaskInstalled] = useState(false);
+
+  useEffect(() => {
+    // Check if MetaMask is installed
+    const checkMetaMask = () => {
+      if (typeof window !== 'undefined') {
+        const ethereum = (window as any).ethereum;
+        setIsMetaMaskInstalled(!!ethereum && !!ethereum.isMetaMask);
+      }
+    };
+    
+    checkMetaMask();
+    // Recheck when window loads
+    window.addEventListener('load', checkMetaMask);
+    return () => window.removeEventListener('load', checkMetaMask);
+  }, []);
 
   const handleConnect = async () => {
     try {
       if (typeof window === 'undefined') return;
 
+      const ethereum = (window as any).ethereum;
+      
       // Check if MetaMask is installed
-      if (!(window as any).ethereum) {
+      if (!ethereum || !ethereum.isMetaMask) {
         toast.error('MetaMask is not installed. Please install MetaMask extension.');
         window.open('https://metamask.io/download/', '_blank');
         return;
       }
 
+      // Find the MetaMask connector
+      const metaMaskConnector = connectors.find((c) => c.id === 'metaMask');
+      
+      if (!metaMaskConnector) {
+        toast.error('MetaMask connector not found');
+        return;
+      }
+
+      // Request account access
+      await ethereum.request({ method: 'eth_requestAccounts' });
+      
+      // Connect using wagmi
       connect({ connector: metaMaskConnector });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Connection error:', error);
-      toast.error('Failed to connect MetaMask');
+      
+      if (error.code === 4001) {
+        toast.error('Connection rejected by user');
+      } else if (error.message?.includes('Already processing')) {
+        toast.info('Please check MetaMask for pending connection request');
+      } else {
+        toast.error('Failed to connect MetaMask. Please try again.');
+      }
     }
   };
 

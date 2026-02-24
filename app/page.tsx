@@ -6,6 +6,7 @@ import { useAccount } from 'wagmi';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { MetaMaskConnectButton } from '@/components/metamask-connect-button';
+import { MetaMaskDebug } from '@/components/metamask-debug';
 import { ChevronRight, Zap } from 'lucide-react';
 import { Footer } from '@/components/footer';
 
@@ -44,6 +45,8 @@ export default function Home() {
           <p className="text-lg sm:text-xl text-[#cccccc] mb-8 max-w-2xl leading-relaxed">
             Real-time salary streaming on Celo blockchain. No waiting for payday. Earn and withdraw whenever you want.
           </p>
+
+          <MetaMaskDebug />
 
           {isConnected ? (
             <div className="flex flex-col sm:flex-row gap-4">

@@ -31,11 +31,9 @@ const celoAlfajores = defineChain({
   testnet: true,
 });
 
-export const metaMaskConnector = metaMask();
-
 export const wagmiConfig = createConfig({
   chains: [celoAlfajores],
-  connectors: [metaMaskConnector],
+  connectors: [metaMask()],
   transports: {
     [celoAlfajores.id]: http(CELO_ALFAJORES_RPC_URL),
   },
