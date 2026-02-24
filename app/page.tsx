@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ChevronRight, Zap } from 'lucide-react';
 import { Footer } from '@/components/footer';
+import { HeroMoneyStream } from '@/components/hero-money-stream';
 
 export default function Home() {
   const { isConnected } = useAccount();
@@ -33,56 +34,62 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-32">
-        <div className="max-w-4xl">
-          <h1 className="text-5xl sm:text-7xl font-bold tracking-tight mb-6 text-balance">
-            Stream Salary.
-            <br />
-            <span className="text-[#FFD600]">Get Paid Per Second.</span>
-          </h1>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-32">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-10 items-center">
+          <div className="max-w-4xl">
+            <h1 className="text-4xl sm:text-7xl font-bold tracking-tight mb-6 text-balance">
+              Stream Salary.
+              <br />
+              <span className="text-[#FFD600]">Get Paid Per Second.</span>
+            </h1>
 
-          <p className="text-lg sm:text-xl text-[#cccccc] mb-8 max-w-2xl leading-relaxed">
-            Real-time salary streaming on Celo blockchain. No waiting for payday. Earn and withdraw whenever you want.
-          </p>
+            <p className="text-base sm:text-xl text-[#cccccc] mb-8 max-w-2xl leading-relaxed">
+              Real-time salary streaming on Celo blockchain. No waiting for payday. Earn and withdraw whenever you want.
+            </p>
 
-          <ConnectButton.Custom>
-            {({ openConnectModal, mounted, account, chain }) => {
-              const ready = mounted;
-              const connected = ready && account && chain;
+            <ConnectButton.Custom>
+              {({ openConnectModal, mounted, account, chain }) => {
+                const ready = mounted;
+                const connected = ready && account && chain;
 
-              return (
-                <div className="flex flex-col sm:flex-row gap-4">
-                  {connected ? (
+                return (
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    {connected ? (
+                      <Button
+                        onClick={() => router.push('/dashboard')}
+                        size="lg"
+                        className="bg-[#FFD600] hover:bg-[#FFD600]/90 text-black font-bold text-lg"
+                      >
+                        Go to Dashboard
+                        <ChevronRight className="w-5 h-5 ml-2" />
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={openConnectModal}
+                        size="lg"
+                        className="bg-[#FFD600] hover:bg-[#FFD600]/90 text-black font-bold text-lg"
+                      >
+                        Connect Wallet
+                        <ChevronRight className="w-5 h-5 ml-2" />
+                      </Button>
+                    )}
                     <Button
-                      onClick={() => router.push('/dashboard')}
                       size="lg"
-                      className="bg-[#FFD600] hover:bg-[#FFD600]/90 text-black font-bold text-lg"
+                      variant="outline"
+                      className="border-[#1a1a1a] hover:bg-[#0a0a0a] text-white font-bold text-lg"
+                      disabled
                     >
-                      Go to Dashboard
-                      <ChevronRight className="w-5 h-5 ml-2" />
+                      Learn More
                     </Button>
-                  ) : (
-                    <Button
-                      onClick={openConnectModal}
-                      size="lg"
-                      className="bg-[#FFD600] hover:bg-[#FFD600]/90 text-black font-bold text-lg"
-                    >
-                      Connect Wallet
-                      <ChevronRight className="w-5 h-5 ml-2" />
-                    </Button>
-                  )}
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="border-[#1a1a1a] hover:bg-[#0a0a0a] text-white font-bold text-lg"
-                    disabled
-                  >
-                    Learn More
-                  </Button>
-                </div>
-              );
-            }}
-          </ConnectButton.Custom>
+                  </div>
+                );
+              }}
+            </ConnectButton.Custom>
+          </div>
+
+          <div className="flex justify-center lg:justify-end mt-8 lg:mt-0">
+            <HeroMoneyStream />
+          </div>
         </div>
       </section>
 

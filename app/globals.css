@@ -162,3 +162,131 @@
     min-width: 48px;
   }
 }
+
+@keyframes streamParticle {
+  0% {
+    left: 96px;
+    opacity: 0;
+    transform: translateY(0) scale(0.7);
+  }
+  12% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-3px) scale(1);
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 96px);
+    opacity: 0;
+    transform: translateY(0) scale(0.7);
+  }
+}
+
+@media (min-width: 640px) {
+  @keyframes streamParticle {
+    0% {
+      left: 112px;
+      opacity: 0;
+      transform: translateY(0) scale(0.7);
+    }
+    12% {
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-3px) scale(1);
+    }
+    88% {
+      opacity: 1;
+    }
+    100% {
+      left: calc(100% - 112px);
+      opacity: 0;
+      transform: translateY(0) scale(0.7);
+    }
+  }
+}
+
+@media (min-width: 1024px) {
+  @keyframes streamParticle {
+    0% {
+      left: 132px;
+      opacity: 0;
+      transform: translateY(0) scale(0.7);
+    }
+    12% {
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-3px) scale(1);
+    }
+    88% {
+      opacity: 1;
+    }
+    100% {
+      left: calc(100% - 132px);
+      opacity: 0;
+      transform: translateY(0) scale(0.7);
+    }
+  }
+}
+
+@keyframes hologramPulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.money-stream-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 214, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 214, 0, 0.08) 1px, transparent 1px);
+  background-size: 36px 36px;
+  transform: perspective(700px) rotateX(62deg) translateY(58px);
+  transform-origin: center bottom;
+  animation: hologramPulse 3.2s ease-in-out infinite;
+}
+
+.money-stream-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 26% 50%, rgba(255, 214, 0, 0.22), transparent 35%),
+    radial-gradient(circle at 74% 50%, rgba(255, 214, 0, 0.22), transparent 35%),
+    radial-gradient(circle at 50% 50%, rgba(255, 214, 0, 0.14), transparent 55%);
+  pointer-events: none;
+}
+
+.money-stream-particle {
+  position: absolute;
+  left: 96px;
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: #FFD600;
+  box-shadow: 0 0 16px rgba(255, 214, 0, 0.95), 0 0 30px rgba(255, 214, 0, 0.55);
+  animation-name: streamParticle;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@media (max-width: 639px) {
+  .money-stream-glow {
+    background:
+      radial-gradient(circle at 26% 50%, rgba(255, 214, 0, 0.14), transparent 35%),
+      radial-gradient(circle at 74% 50%, rgba(255, 214, 0, 0.14), transparent 35%),
+      radial-gradient(circle at 50% 50%, rgba(255, 214, 0, 0.08), transparent 55%);
+  }
+
+  .money-stream-particle {
+    box-shadow: 0 0 10px rgba(255, 214, 0, 0.75), 0 0 18px rgba(255, 214, 0, 0.38);
+  }
+}

@@ -240,12 +240,4 @@ If you redeploy contracts, always update env vars so frontend points to the corr
 
 ---
 
-## Related Docs
-
-- `FINAL_README.md`
-- `START_HERE.md`
-- `QUICK_START.md`
-- `DEPLOYMENT.md`
-- `TECHNICAL_SPEC.md`
-- `DOCS_INDEX.md`
-- `PROJECT_SUMMARY.md`
+If you want this file to become the main README, replace `README.md` with this content and keep old docs as supporting references (`DEPLOYMENT.md`, `TECHNICAL_SPEC.md`, etc.).
